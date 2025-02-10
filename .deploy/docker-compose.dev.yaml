@@ -13,10 +13,3 @@ services:
       - ../:/opt/app
       - node_modules:/opt/app/node_modules
     command: ['npm', 'start']
-
-  chroma:
-    image: ghcr.io/chroma-core/chroma:latest
-    ports:
-      - '8000:8000'
-    volumes:
-      - chroma_data:/chroma

@@ -7,26 +7,36 @@ process.on('unhandledRejection', (rejection) => {
   console.error(new Date().toString(), ': unhandledRejection', rejection)
 })
 
-import {runWorkflow} from './workflow'
-import {LeeaAgent} from '@leealabs/agent-js-sdk'
-import {z} from 'zod'
-import {appConfig} from './config'
+
+import { LeeaAgent } from '@leealabs/agent-js-sdk'
+import { z } from 'zod'
+import { appConfig } from './config'
+import { RequestHandler } from '@leealabs/agent-js-sdk'
+import { InputData } from './types/schema'
+import { ethers } from 'ethers';
+
+export const runWorkflow: RequestHandler = async (data: InputData, ctx) => {
+  const MANTLE_TESTNET_RPC = 'https://rpc.testnet.mantle.xyz';
+
+  const provider = new ethers.JsonRpcProvider(MANTLE_TESTNET_RPC);
+  const receipt = await provider.getTransactionReceipt(data.tx);
+  if (receipt) {
+    return "true"
+  }
+  return "false"
+}
+
 
 const main = async () => {
   const agent = new LeeaAgent()
   await agent.initialize({
-    name: 'twitter',
+    name: 'mantle',
     fee: 10000,
-    description: `I can analyze X. Give me a description of profiles to find and what do you want as a result. For example: 
-    {
-      "profilesToFind": "Top 100 AI influencers",
-      "summarizer": "Define what is trending and predict future. Create post for X"
-    }`,
+    description: `I can check if there is a transaction on Mantle Testnet`,
     inputSchema: z.object({
-      profilesToFind: z.string({description: 'Description of twitter profiles to parse'}),
-      summarizer: z.string({description: 'Prompt to summarize posts after fetching'}),
+      tx: z.string({ description: 'Transaction hash' }),
     }),
-    outputSchema: z.string(),
+    outputSchema: z.boolean(),
     secretPath: './id.json',
     apiToken: appConfig.LEEA_API_TOKEN,
     requestHandler: runWorkflow,
@@ -36,9 +46,3 @@ const main = async () => {
 }
 
 main()
-
-// runBuilder(console.log, {
-//   profilesToFind: 'Top 100 AI influencers',
-//   summarizer: 'Define what is trending and predict future. Create post for X',
-//   id: 'ai_influence',
-// }).then(console.log)

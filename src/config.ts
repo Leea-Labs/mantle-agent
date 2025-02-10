@@ -6,18 +6,12 @@ type Config = {
 
 class AppConfig {
   static readonly fields = [
-    'OPENAI_API_KEY',
     'LEEA_API_TOKEN',
-    'TWITTERSCOUT_API_KEY',
-    'CHROMA_URL',
     'NODE_ENV',
   ] as const
 
   private readonly requiredFiedls: Partial<typeof AppConfig.fields> = [
-    'OPENAI_API_KEY',
     'LEEA_API_TOKEN',
-    'TWITTERSCOUT_API_KEY',
-    'CHROMA_URL',
   ]
   private readonly envPath = path.resolve(__dirname, '../.env')
 
