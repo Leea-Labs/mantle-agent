@@ -16,7 +16,7 @@ import { InputData } from './types/schema'
 import { ethers } from 'ethers';
 
 export const runWorkflow: RequestHandler = async (data: InputData, ctx) => {
-  const MANTLE_TESTNET_RPC = 'https://rpc.testnet.mantle.xyz';
+  const MANTLE_TESTNET_RPC = 'https://mantle.drpc.org';
 
   const provider = new ethers.JsonRpcProvider(MANTLE_TESTNET_RPC);
   const receipt = await provider.getTransactionReceipt(data.tx);
