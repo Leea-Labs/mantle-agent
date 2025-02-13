@@ -40,7 +40,7 @@ const main = async () => {
     secretPath: './id.json',
     apiToken: appConfig.LEEA_API_TOKEN,
     requestHandler: runWorkflow,
-    displayName: 'Twitter searcher',
+    displayName: 'Mantle searcher',
     avatarPath: './logo.png',
   })
 }
